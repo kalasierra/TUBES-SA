@@ -1,91 +1,91 @@
 import tkinter as tk
 import time
 
-def insertion_sort(food_list):
-    for i in range(1, len(food_list)):
-        key = food_list[i]
+def insertion_sort(list_food):
+    for i in range(1, len(list_food)):
+        key = list_food[i]
         j = i - 1
-        while j >= 0 and food_list[j][1] > key[1]:
-            food_list[j + 1] = food_list[j]
+        while j >= 0 and list_food[j][1] > key[1]:
+            list_food[j + 1] = list_food[j]
             j -= 1
-        food_list[j + 1] = key
+        list_food[j + 1] = key
 
 
-def greedy_cat_feeding(food_list, desired_protein):
-    insertion_sort(food_list)  # Sort food list by carbohydrate content using insertion sort
+def greedy_cat_feeding(list_food, target_protein):
+    insertion_sort(list_food)  # Urutkan daftar makanan berdasarkan kandungan karbohidrat menggunakan insertion sort
 
-    best_combination = []
+    kombinasi_terbaik = []
     total_protein = 0
-    total_carbohydrates = 0
+    total_karbohidrat = 0
 
-    for food in food_list:
-        if total_protein >= desired_protein:
+    for food in list_food:
+        if total_protein >= target_protein:
             break
 
-        combination = best_combination + [food]
+        kombinasi = kombinasi_terbaik + [food]
         new_protein = total_protein + food[1]
-        new_carbohydrates = total_carbohydrates + food[2]
+        new_karbohidrat = total_karbohidrat + food[2]
 
-        if new_protein > desired_protein:
-            if new_carbohydrates < total_carbohydrates:
-                best_combination = combination
+        if new_protein > target_protein:
+            if new_karbohidrat < total_karbohidrat:
+                kombinasi_terbaik = kombinasi
                 total_protein = new_protein
-                total_carbohydrates = new_carbohydrates
+                total_karbohidrat = new_karbohidrat
         else:
-            best_combination = combination
+            kombinasi_terbaik = kombinasi
             total_protein = new_protein
-            total_carbohydrates = new_carbohydrates
+            total_karbohidrat = new_karbohidrat
 
-    return best_combination
+    return kombinasi_terbaik
 
 
-def find_best_combination():
-    food_list = []
-    desired_protein = 0
+def find_kombinasi_terbaik():
+    list_food = []
+    target_protein = 0
     
     start_time = time.time()  # Ambil waktu awal eksekusi
 
-    # Get values from input fields
+    # Dapatkan nilai dari kolom input
     for entry in food_entries:
-        name = entry[0].get()
+        jenis_makanan = entry[0].get()
         protein = float(entry[1].get())
-        carbohydrates = float(entry[2].get())
-        food_list.append((name, protein, carbohydrates))
+        karbohidrat = float(entry[2].get())
+        list_food.append((jenis_makanan, protein, karbohidrat))
 
-    desired_protein = float(desired_protein_entry.get())
+    target_protein = float(target_protein_entry.get())
 
-    best_combination = greedy_cat_feeding(food_list, desired_protein)
+    kombinasi_terbaik = greedy_cat_feeding(list_food, target_protein)
 
-    if best_combination:
-        result_text.set("Best combination:\n" + "\n".join([food[0] for food in best_combination]))
+    if kombinasi_terbaik:
+        result_text.set("Best kombinasi:\n" + "\n".join([food[0] for food in kombinasi_terbaik]))
     else:
-        result_text.set("No combination found.")
+        result_text.set("Tidak ditemukan kombinasi.")
         
     end_time = time.time()  # Ambil waktu akhir eksekusi
-    execution_time = end_time - start_time  # Hitung waktu eksekusi
+    eksekusi_waktu = end_time - start_time  # Hitung waktu eksekusi
     
-    execution_time_label.config(text="Execution Time: {:.4f} seconds".format(execution_time))
+    eksekusi_waktu_label.config(text="Execution Time: {:.4f} seconds".format(eksekusi_waktu))
 
-# Create the main window
+# Buat jendela utama
 window = tk.Tk()
 window.configure(bg="light blue")
 window.title("Greedy Cat Feeding")
 
-# Create the food list section
-food_list_frame = tk.Frame(window)
-food_list_frame.configure(bg="light blue")
-food_list_frame.pack()
+# Buat bagian daftar jenis makanan
+list_food_frame = tk.Frame(window)
+list_food_frame.configure(bg="light blue")
+list_food_frame.pack()
 
 food_entries = []
 num_foods = tk.IntVar()
 num_foods.set(3)
 
 #Label dan Entry untuk jumlah makanan kucing
-num_foods_label = tk.Label(food_list_frame, text="Number of Foods:")
+num_foods_label = tk.Label(list_food_frame, text="Banyaknya Makanan:")
 num_foods_label.configure(bg="light blue")
 num_foods_label.grid(row=0, column=0, sticky="e")
 
-num_foods_entry = tk.Entry(food_list_frame, textvariable=num_foods)
+num_foods_entry = tk.Entry(list_food_frame, textvariable=num_foods)
 num_foods_entry.grid(row=0, column=1, padx=5, pady=5)
 
 def update_food_entries():
@@ -96,47 +96,47 @@ def update_food_entries():
         entry[2].destroy()
     food_entries.clear()
     for i in range(count):
-        food_name_label = tk.Label(food_list_frame, text="Food {}: ".format(i + 1))
-        food_name_label.configure(bg="light blue")
-        food_name_label.grid(row=i + 1, column=0, sticky="e")
+        food_jenis_makanan_label = tk.Label(list_food_frame, text="Food {}: ".format(i + 1))
+        food_jenis_makanan_label.configure(bg="light blue")
+        food_jenis_makanan_label.grid(row=i + 1, column=0, sticky="e")
 
-        food_name_entry = tk.Entry(food_list_frame)
-        food_name_entry.grid(row=i + 1, column=1)
+        food_jenis_makanan_entry = tk.Entry(list_food_frame)
+        food_jenis_makanan_entry.grid(row=i + 1, column=1)
 
-        protein_label = tk.Label(food_list_frame, text="Protein: ")
+        protein_label = tk.Label(list_food_frame, text="Protein: ")
         protein_label.configure(bg="light blue")
         protein_label.grid(row=i + 1, column=2, sticky="e")
 
-        protein_entry = tk.Entry(food_list_frame)
+        protein_entry = tk.Entry(list_food_frame)
         protein_entry.grid(row=i + 1, column=3)
 
-        carbohydrates_label = tk.Label(food_list_frame, text="Carbohydrates: ")
-        carbohydrates_label.configure(bg="light blue")
-        carbohydrates_label.grid(row=i + 1, column=4, sticky="e")
+        karbohidrat_label = tk.Label(list_food_frame, text="karbohidrat: ")
+        karbohidrat_label.configure(bg="light blue")
+        karbohidrat_label.grid(row=i + 1, column=4, sticky="e")
 
-        carbohydrates_entry = tk.Entry(food_list_frame)
-        carbohydrates_entry.grid(row=i + 1, column=5)
+        karbohidrat_entry = tk.Entry(list_food_frame)
+        karbohidrat_entry.grid(row=i + 1, column=5)
 
-        food_entries.append((food_name_entry, protein_entry, carbohydrates_entry))
+        food_entries.append((food_jenis_makanan_entry, protein_entry, karbohidrat_entry))
 
-update_button = tk.Button(food_list_frame, text="Update", command=update_food_entries)
+update_button = tk.Button(list_food_frame, text="Update", command=update_food_entries)
 update_button.grid(row=0, column=2, padx=5, pady=5)
 
 update_food_entries()
 
-# Create the desired protein section
-desired_protein_frame = tk.Frame(window)
-desired_protein_frame.configure(bg="light blue")
-desired_protein_frame.pack(pady=10)
+# Buat bagian untuk target protein 
+target_protein_frame = tk.Frame(window)
+target_protein_frame.configure(bg="light blue")
+target_protein_frame.pack(pady=10)
 
-desired_protein_label = tk.Label(desired_protein_frame, text="Desired Protein:")
-desired_protein_label.configure(bg="light blue")
-desired_protein_label.grid(row=0, column=0, sticky="e")
+target_protein_label = tk.Label(target_protein_frame, text="Target Protein:")
+target_protein_label.configure(bg="light blue")
+target_protein_label.grid(row=0, column=0, sticky="e")
 
-desired_protein_entry = tk.Entry(desired_protein_frame)
-desired_protein_entry.grid(row=0, column=1, padx=5, pady=5)
+target_protein_entry = tk.Entry(target_protein_frame)
+target_protein_entry.grid(row=0, column=1, padx=5, pady=5)
 
-# Create the result section
+# Buat bagian untuk result
 result_frame = tk.Frame(window)
 result_frame.configure(bg="light blue")
 result_frame.pack()
@@ -146,11 +146,11 @@ result_label = tk.Label(result_frame, textvariable=result_text)
 result_label.configure(bg="light blue")
 result_label.pack()
 
-execution_time_label = tk.Label(result_frame)
-execution_time_label.configure(bg="light blue")
-execution_time_label.pack()
+eksekusi_waktu_label = tk.Label(result_frame)
+eksekusi_waktu_label.configure(bg="light blue")
+eksekusi_waktu_label.pack()
 
-find_combination_button = tk.Button(result_frame, text="Find Best Combination", command=find_best_combination)
-find_combination_button.pack(pady=10)
+find_kombinasi_button = tk.Button(result_frame, text="Find Best kombinasi", command=find_kombinasi_terbaik)
+find_kombinasi_button.pack(pady=10)
 
 window.mainloop()
